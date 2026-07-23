@@ -3,56 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - FF Tournament</title>
+<title>FF Tournament - Login</title>
 
 <link rel="stylesheet" href="style.css">
+
+<style>
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.login-box{
+width:95%;
+max-width:420px;
+background:#1c1c1c;
+padding:25px;
+border-radius:18px;
+box-shadow:0 0 20px rgba(255,102,0,.4);
+}
+
+.logo{
+font-size:60px;
+text-align:center;
+margin-bottom:10px;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:#2a2a2a;
+color:#fff;
+font-size:16px;
+}
+
+a{
+color:#ff6600;
+text-decoration:none;
+font-weight:bold;
+}
+</style>
 
 </head>
 <body>
 
-<header>
-🔥 FF TOURNAMENT 🔥
-</header>
+<div class="login-box">
 
-<div class="container">
+<div class="logo">🔥</div>
 
-<div class="card">
+<h2>FF Tournament Login</h2>
 
-<h2>Player Login</h2>
+<input type="email" id="email" placeholder="Enter Email">
 
-<form>
+<input type="password" id="password" placeholder="Enter Password">
 
-<input type="email" id="email" placeholder="Email" required style="width:100%;padding:10px;margin:10px 0;">
+<button id="loginBtn">LOGIN</button>
 
-<input type="password" id="password" placeholder="Password" required style="width:100%;padding:10px;margin:10px 0;">
-
-<button type="button" id="loginBtn">
-Login
-</button>
-
-<br><br>
-
-<p style="text-align:center;">
+<p style="text-align:center;margin-top:20px;">
 Don't have an account?
 <a href="signup.html">Sign Up</a>
 </p>
-</form>
-
-<br>
-
-
-</div>
 
 </div>
 
 <script src="script.js"></script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
@@ -61,27 +88,24 @@ const firebaseConfig = {
   projectId: "ff-tournament-23632",
   storageBucket: "ff-tournament-23632.firebasestorage.app",
   messagingSenderId: "835922870929",
-  appId: "1:835922870929:web:300ebd777b1ce8f7167530",
-  measurementId: "G-B9QF7G3R4K"
+  appId: "1:835922870929:web:300ebd777b1ce8f7167530"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-document.getElementById("loginBtn").addEventListener("click", () => {
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+document.getElementById("loginBtn").onclick = () => {
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Login Successful");
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-
-});
+signInWithEmailAndPassword(auth,email,password)
+.then(()=>{
+alert("Login Successful");
+window.location.href="dashboard.html";
+})
+.catch(err=>alert(err.message));
+};
 </script>
+
 </body>
 </html>
