@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>FF Tournament - Login</title>
 
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6600">
 
 <style>
 body{
@@ -13,6 +16,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
+background:#111;
 }
 
 .login-box{
@@ -33,6 +37,7 @@ margin-bottom:10px;
 h2{
 text-align:center;
 margin-bottom:20px;
+color:white;
 }
 
 input{
@@ -54,6 +59,7 @@ font-weight:bold;
 </style>
 
 </head>
+
 <body>
 
 <div class="login-box">
@@ -68,7 +74,7 @@ font-weight:bold;
 
 <button id="loginBtn">LOGIN</button>
 
-<p style="text-align:center;margin-top:20px;">
+<p style="text-align:center;margin-top:20px;color:white;">
 Don't have an account?
 <a href="signup.html">Sign Up</a>
 </p>
@@ -82,28 +88,32 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
-  authDomain: "ff-tournament-23632.firebaseapp.com",
-  databaseURL: "https://ff-tournament-23632-default-rtdb.firebaseio.com",
-  projectId: "ff-tournament-23632",
-  storageBucket: "ff-tournament-23632.firebasestorage.app",
-  messagingSenderId: "835922870929",
-  appId: "1:835922870929:web:300ebd777b1ce8f7167530"
+apiKey:"AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
+authDomain:"ff-tournament-23632.firebaseapp.com",
+databaseURL:"https://ff-tournament-23632-default-rtdb.firebaseio.com",
+projectId:"ff-tournament-23632",
+storageBucket:"ff-tournament-23632.firebasestorage.app",
+messagingSenderId:"835922870929",
+appId:"1:835922870929:web:300ebd777b1ce8f7167530"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
 
-document.getElementById("loginBtn").onclick = () => {
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
+document.getElementById("loginBtn").onclick=()=>{
+
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
 signInWithEmailAndPassword(auth,email,password)
 .then(()=>{
 alert("Login Successful");
 window.location.href="dashboard.html";
 })
-.catch(err=>alert(err.message));
+.catch(err=>{
+alert(err.message);
+});
+
 };
 </script>
 
