@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment - FF Tournament</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>🔥 FF TOURNAMENT 🔥</header>
+
+<div class="container">
+  <div class="card">
+
+    <h2>Tournament Entry Fee</h2>
+
+    <h3>₹50</h3>
+
+    <p>UPI ID: <b>yourupi@upi</b></p>
+
+    <p>Upload Payment Screenshot</p>
+
+    <input type="file" id="paymentScreenshot" accept="image/*">
+
+    <br><br>
+
+    <button id="submitPayment">Submit Payment</button>
+
+  </div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
+  authDomain: "ff-tournament-23632.firebaseapp.com",
+  databaseURL: "https://ff-tournament-23632-default-rtdb.firebaseio.com",
+  projectId: "ff-tournament-23632",
+  messagingSenderId: "835922870929",
+  appId: "1:835922870929:web:300ebd777b1ce8f7167530"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+document.getElementById("submitPayment").addEventListener("click", async () => {
+
+  const file = document.getElementById("paymentScreenshot").files[0];
+
+  if (!file) {
+    alert("Please select a screenshot");
+    return;
+  }
+
+  alert("Uploading...");
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "ff_tournament");
+
+  const response = await fetch(
+    "https://api.cloudinary.com/v1_1/fzabk8vx/image/upload",
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  const result = await response.json();  if (result.secure_url) {
+
+    await push(ref(db, "payments"), {
+      screenshot: result.secure_url,
+      status: "Pending",
+      uploadTime: Date.now()
+    });
+
+    alert("Payment Submitted Successfully!");
+    window.location.href = "dashboard.html";
+
+  } else {
+    alert("Upload Failed!");
+    console.log(result);
+  }
+
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Permission Demo</title>
+</head>
+<body>
+
+<h2>Permission Demo</h2>
+
+<button onclick="requestCamera()">Allow Camera</button>
+<button onclick="requestLocation()">Allow Location</button>
+
+<video id="video" autoplay playsinline width="300"></video>
+
+<script>
+async function requestCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    });
+    document.getElementById("video").srcObject = stream;
+    alert("Camera permission granted.");
+  } catch (e) {
+    alert("Camera permission denied.");
+  }
+}
+
+function requestLocation() {
+  navigator.geolocation.getCurrentPosition(
+    () => alert("Location permission granted."),
+    () => alert("Location permission denied.")
+  );
+}
+</script>
+
+</body>
+</html>

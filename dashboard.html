@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FF Tournament Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>🔥 FF TOURNAMENT 🔥</header>
+
+<div class="container">
+
+<div class="card">
+<h2>👋 Welcome Player</h2>
+<p id="playerName">Loading...</p>
+<p id="status">Status: Pending</p>
+</div>
+
+<div class="card">
+<h2>🎮 Room Details</h2>
+<p><b>Room ID:</b> <span id="roomId">Waiting...</span></p>
+<p><b>Password:</b> <span id="roomPass">Waiting...</span></p>
+</div>
+
+<div class="card">
+<a href="register.html"><button>📝 Register Tournament</button></a>
+</div>
+
+<div class="card">
+<a href="payment.html"><button>💳 Payment</button></a>
+</div>
+
+<div class="card">
+<a href="winners.html"><button>🏆 Winners</button></a>
+</div>
+
+<div class="card">
+<a href="contact.html"><button>📞 Contact</button></a>
+</div>
+
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+import {
+  getAuth
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
+  authDomain: "ff-tournament-23632.firebaseapp.com",
+  databaseURL: "https://ff-tournament-23632-default-rtdb.firebaseio.com",
+  projectId: "ff-tournament-23632",
+  storageBucket: "ff-tournament-23632.firebasestorage.app",
+  messagingSenderId: "835922870929",
+  appId: "1:835922870929:web:300ebd777b1ce8f7167530"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+onValue(ref(db, "registrations"), (snapshot) => {
+
+  snapshot.forEach((child) => {
+
+    const data = child.val();
+
+    document.getElementById("playerName").innerText =
+      data.playerName || "Player";
+
+    document.getElementById("status").innerText =
+      "Status: " + (data.status || "Pending");
+
+    document.getElementById("roomId").innerText =
+      data.roomId || "Not Assigned";
+
+    document.getElementById("roomPass").innerText =
+      data.roomPassword || "Not Assigned";
+  });
+
+});
+</script>
+
+</body>
+</html>
