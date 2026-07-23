@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -23,12 +24,8 @@ Loading...
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
- {import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-getDatabase,
-ref,
-onValue,
-update
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyARD_gzjk4CBtFZ-3OdFrvxLoZeWaRGi2k",
@@ -41,14 +38,14 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 const auth = getAuth(app);
+const db = getDatabase(app);
 
 onAuthStateChanged(auth, (user) => {
 
   if (!user) {
     alert("Please Login First");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
 
@@ -59,68 +56,69 @@ onAuthStateChanged(auth, (user) => {
   }
 
 });
+
 const players = document.getElementById("players");
+
 onValue(ref(db, "registrations"), (snapshot) => {
 
-players.innerHTML = "";
+  players.innerHTML = "";
 
-snapshot.forEach((child) => {
+  snapshot.forEach((child) => {
 
-const data = child.val();
+    const data = child.val();
 
-players.innerHTML += `
-<div class="card">
+    players.innerHTML += `
+    <div class="card">
+      <b>Name:</b> ${data.playerName || ""}<br>
+      <b>UID:</b> ${data.uid || ""}<br>
+      <b>Mobile:</b> ${data.mobile || ""}<br>
+      <b>Status:</b> ${data.status || "Pending"}<br><br>
 
-<b>Name:</b> ${data.playerName}<br>
-<b>UID:</b> ${data.uid}<br>
-<b>Mobile:</b> ${data.mobile}<br>
-<b>Status:</b> ${data.status || "Pending"}<br><br>
+      <button onclick="approvePlayer('${child.key}')">Approve</button>
+      <br><br>
 
-<button onclick="approvePlayer('${child.key}')">Approve</button>
-<button onclick="rejectPlayer('${child.key}')">Reject</button>
+      <button onclick="rejectPlayer('${child.key}')">Reject</button>
+      <br><br>
 
-<br><br>
+      <input type="text" id="room${child.key}" placeholder="Room ID"><br><br>
 
-<input type="text" id="room${child.key}" placeholder="Room ID"><br><br>
+      <input type="text" id="pass${child.key}" placeholder="Room Password"><br><br>
 
-<input type="text" id="pass${child.key}" placeholder="Room Password"><br><br>
+      <button onclick="saveRoom('${child.key}')">Save Room</button>
+    </div><br>
+    `;
 
-<button onclick="saveRoom('${child.key}')">Save Room</button>
-
-</div><br>
-`;
+  });
 
 });
 
-});
+window.approvePlayer = function(id){
+  update(ref(db,"registrations/"+id),{
+    status:"Approved"
+  });
+  alert("Player Approved");
+}
 
-window.approvePlayer = function(id) {
-update(ref(db, "registrations/" + id), {
-status: "Approved"
-});
-alert("Player Approved");
-};
+window.rejectPlayer = function(id){
+  update(ref(db,"registrations/"+id),{
+    status:"Rejected"
+  });
+  alert("Player Rejected");
+}
 
-window.rejectPlayer = function(id) {
-update(ref(db, "registrations/" + id), {
-status: "Rejected"
-});
-alert("Player Rejected");
-};
+window.saveRoom = function(id){
 
-window.saveRoom = function(id) {
+  const roomId=document.getElementById("room"+id).value;
+  const roomPass=document.getElementById("pass"+id).value;
 
-const roomId = document.getElementById("room"+id).value;
-const roomPass = document.getElementById("pass"+id).value;
+  update(ref(db,"registrations/"+id),{
+    roomId:roomId,
+    roomPassword:roomPass
+  });
 
-update(ref(db, "registrations/" + id), {
-roomId: roomId,
-roomPassword: roomPass
-});
+  alert("Room Saved");
 
-alert("Room Saved");
-
-};
+}
 
 </script>
 
